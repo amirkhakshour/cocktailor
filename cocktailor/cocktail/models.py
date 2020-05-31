@@ -1,7 +1,10 @@
+from typing import List
+
 from django.db import models
-from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.utils import timezone
+from django.db.models import Count
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import date as date_filter
 
@@ -25,6 +28,11 @@ class Ingredient(models.Model):
         return self.name
 
 
+class AvailableIngredientQuerySet(models.QuerySet):
+    def fresh(self):
+        return self.filter(models.Q(expire_date__gt=timezone.now()),)
+
+
 class AvailableIngredient(models.Model):
     """Describes an ingredient for cocktail. This ingredient contains attributes like
     expiration date and type of drink, weather it's alcoholic or not."""
@@ -35,6 +43,8 @@ class AvailableIngredient(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    objects = AvailableIngredientQuerySet.as_manager()
 
     def __str__(self):
         date_format = settings.DATETIME_FORMAT
@@ -47,6 +57,15 @@ class AvailableIngredient(models.Model):
         ordering = ("-modified", "-created", "-expire_date")
 
 
+class CocktailQuerySet(models.QuerySet):
+    def includes_ingredients(self, ingredients: List[Ingredient]):
+        return (
+            self.filter(ingredients__in=ingredients)
+            .annotate(num_ingreds=Count("ingredients"))
+            .filter(num_ingreds=len(ingredients))
+        )
+
+
 class Cocktail(models.Model):
     """Basic object representing a Cocktail which includes different ingredients."""
 
@@ -54,6 +73,8 @@ class Cocktail(models.Model):
     ingredients = models.ManyToManyField(Ingredient)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    objects = CocktailQuerySet.as_manager()
 
     def __str__(self):
         return self.name
