@@ -22,8 +22,6 @@ Basic Commands
 Setting Up Your Users
 ^^^^^^^^^^^^^^^^^^^^^
 
-* To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
-
 * To create an **superuser account**, use this command::
 
     $ python manage.py createsuperuser
@@ -72,9 +70,24 @@ Local deployment
 
 
 Production deployment
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 ::
 
     $ docker-compose -f production.yml build
     $ docker-compose -f production.yml up
 
+
+
+using API
+^^^^^^^^^^
+1- create a token using username and password you've created during setup:
+
+::
+
+    $ curl -X POST -d "username=admin&password=admin" http://127.0.0.1:8000/auth-token/
+
+2- use to auth token in response to access endpoints:
+
+::
+
+    $ curl http://127.0.0.1:8000/api/cocktail/ingredients/ -H 'Authorization: Token 00f8cd25a71451799f84cfa637a0ca29c829cea9'
