@@ -1,10 +1,11 @@
+import random
 from datetime import timedelta
 from django.utils import timezone
 from rest_framework import status
 
 from cocktail.models import AvailableIngredient
 from cocktail.api.serializers import AvailableIngredientSerializer
-from .factories import IngredientFactory
+from .factories import IngredientFactory, CocktailFactory
 
 
 # Note: testing other endpoints for Ingredient, Cocktail
@@ -27,3 +28,18 @@ def test_available_ingredients_invalid_expire_date(db, user_api_client):
     errors = resp.json()
     assert "expire_date" in errors
     assert "must be in the future time" in errors["expire_date"][0]
+
+
+def test_cocktails_for_available_ingreds(db, user_api_client):
+    num_ingredients = 6
+    num_cocktails = 20
+    ingredients = [IngredientFactory() for _ in range(num_ingredients)]
+    for item in range(num_cocktails):
+        CocktailFactory.create(
+            ingredients=random.sample(ingredients, random.randint(3, num_ingredients))
+        )
+
+    resp = user_api_client.api_call(
+        "api:api_cocktails:availableingredient-cocktails", "get"
+    )
+    assert resp.status_code == status.HTTP_200_OK
