@@ -61,12 +61,11 @@ class ApiClient(Client):
         if url_kwargs is None:
             url_kwargs = {}
 
-        if "version" not in url_kwargs:
-            url_kwargs.update({"version": 1})
         try:
             url = reverse(url_name, kwargs=url_kwargs)
         except NoReverseMatch:
             url = url_name
+
         method = getattr(super(), method.lower())
         kwargs = {"content_type": "application/json"}
 
