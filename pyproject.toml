@@ -2,7 +2,7 @@
 name = "cocktailor"
 version = "0.1.0"
 description = "Get Awsome Refreshing Cocktail Recipes!"
-authors = ["Amir Khakshour<khakshour.amir@gmail.com>"]
+authors = ["Amir Khakshour <khakshour.amir@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
