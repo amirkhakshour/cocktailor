@@ -1,12 +1,15 @@
 import os
 import json
 
+import pytest
 import django
 from django.urls import reverse, NoReverseMatch
 from django.contrib.auth.models import AnonymousUser
 from django.test.client import Client
-
 from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def pytest_configure(config):
@@ -73,3 +76,49 @@ class ApiClient(Client):
             response = method(url, **kwargs)
 
         return response
+
+
+@pytest.fixture
+def staff_user(db):
+    """Return a staff member."""
+    return User.objects.create_user(
+        email="staff_test@example.com",
+        password="password",
+        is_staff=True,
+        is_active=True,
+    )
+
+
+@pytest.fixture
+def superuser():
+    superuser = User.objects.create_superuser("superuser@example.com", "pass")
+    return superuser
+
+
+@pytest.fixture
+def customer_user():  # pylint: disable=W0613
+    user = User.objects.create_user(
+        "test@example.com", "password", first_name="Leslie", last_name="Wade",
+    )
+    user._password = "password"
+    return user
+
+
+@pytest.fixture
+def staff_api_client(staff_user):
+    return ApiClient(user=staff_user)
+
+
+@pytest.fixture
+def superuser_api_client(superuser):
+    return ApiClient(user=superuser)
+
+
+@pytest.fixture
+def user_api_client(customer_user):
+    return ApiClient(user=customer_user)
+
+
+@pytest.fixture
+def api_client():
+    return ApiClient(user=AnonymousUser())
