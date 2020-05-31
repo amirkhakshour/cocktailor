@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=cocktailor
+POSTGRES_USER=rBKnCWFSCyqZkCuZtYyEkaTVQHrxnTkS
+POSTGRES_PASSWORD=BXsOpoCnUZAwQfYwqpIbzJghF1AKhTlAgA5D5CB4e0fBb6qAuwdL4eWhC6Y6PYuP
