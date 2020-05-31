@@ -1,7 +1,18 @@
 from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import date as date_filter
+
+
+def validate_future_dt(dt):
+    """Check if given date time is greater than now!."""
+    if dt <= timezone.now():
+        raise ValidationError(
+            _("%(value)s must be in the future time!"),
+            params={"value": date_filter(dt, settings.DATETIME_FORMAT)},
+        )
 
 
 class Ingredient(models.Model):
@@ -19,7 +30,9 @@ class AvailableIngredient(models.Model):
     expiration date and type of drink, weather it's alcoholic or not."""
 
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    expire_date = models.DateTimeField(_("expire date"), db_index=True)
+    expire_date = models.DateTimeField(
+        _("expire date"), db_index=True, validators=[validate_future_dt]
+    )
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
