@@ -2,8 +2,8 @@
 With these settings, tests run faster.
 """
 
-from .base import *  # noqa
-from .base import env
+from config.settings.base import *  # noqa
+from config.settings.base import env  # noqa
 
 # GENERAL
 # ------------------------------------------------------------------------------
