@@ -3,12 +3,14 @@ Base settings to build other settings files upon.
 """
 from pathlib import Path
 
+import sys
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # cocktailor/
 APPS_DIR = ROOT_DIR / "cocktailor"
 env = environ.Env()
+sys.path.insert(2, str(APPS_DIR))
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
