@@ -237,7 +237,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
+            "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -276,4 +276,10 @@ REST_FRAMEWORK = {
 }
 # Cocktail
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ['cocktail']
+INSTALLED_APPS += ["cocktail"]
+COCKTAIL_INIT_INGREDIENTS_URL = (
+    "https://us-central1-nexible-code.cloudfunctions.net/ingredients"
+)
+COCKTAIL_INIT_COCKTAILS_URL = (
+    "https://us-central1-nexible-code.cloudfunctions.net/cocktails"
+)
