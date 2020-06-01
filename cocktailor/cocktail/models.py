@@ -58,9 +58,17 @@ class AvailableIngredient(models.Model):
 
 
 class CocktailQuerySet(models.QuerySet):
-    def includes_ingredients(self, ingredients: List[Ingredient]):
+    def includes_any_ingredients(self, ingredients: List[Ingredient]):
+        """Manager Method that returns any cocktail that contains at least one ingredient in the list."""
+        return self.filter(ingredients__in=ingredients)
+
+    def includes_only_ingredients(self, ingredients: List[Ingredient]):
+        """Manager Method that returns only cocktails that contain all the ingredient in the list."""
+        cids = Cocktail.objects.filter(ingredients__in=ingredients).values_list(
+            "id", flat=True
+        )
         return (
-            self.filter(ingredients__in=ingredients)
+            self.filter(id__in=cids)
             .annotate(num_ingreds=Count("ingredients"))
             .filter(num_ingreds=len(ingredients))
         )
