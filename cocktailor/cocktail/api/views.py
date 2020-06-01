@@ -28,7 +28,10 @@ class AvailableIngredientViewSet(viewsets.ModelViewSet):
         """Return list of cocktails that can be made using available
         ingredients which are not expired yet."""
         fresh_ingredients = AvailableIngredient.objects.fresh()
-        cocktails = Cocktail.objects.includes_ingredients(
+        if not fresh_ingredients:
+            return Response([])
+
+        cocktails = Cocktail.objects.includes_any_ingredients(
             [item.ingredient for item in fresh_ingredients]
         )
         serializer = CocktailBaseSerializer(cocktails, many=True)
