@@ -24,6 +24,7 @@ django-anymail = {version = "==7.1.0", extras = ["mailgun"]}
 django-storages = {version = "==1.9.1", extras = ["google"]}
 gunicorn = "==20.0.4"
 psycopg2 = "==2.8.5"
+drf-yasg = "^1.17.1"
 
 
 [tool.poetry.dev-dependencies]

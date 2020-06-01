@@ -285,3 +285,9 @@ COCKTAIL_INIT_INGREDIENTS_URL = (
 COCKTAIL_INIT_COCKTAILS_URL = (
     "https://us-central1-nexible-code.cloudfunctions.net/cocktails"
 )
+
+# drf_yasg
+# ------------------------------------------------------------------------------
+INSTALLED_APPS += [
+    "drf_yasg",
+]
