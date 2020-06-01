@@ -39,4 +39,6 @@ until postgres_ready; do
 done
 >&2 echo 'PostgreSQL is available'
 
+>&2 echo 'Init Database'
+python manage.py init_cocktails
 exec "$@"
